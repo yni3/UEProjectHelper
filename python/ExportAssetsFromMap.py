@@ -37,6 +37,7 @@ external_actor_class_cache = {}
 
 def preload_external_actor_classes(map_path):
     try:
+        unreal.log(f"[LoadLevel] Loading map: {map_path}")
         editor_level_lib.load_level(map_path)
         for actor in editor_level_lib.get_all_level_actors():
             path = actor.get_path_name()
@@ -56,6 +57,7 @@ def get_class_name(asset_path, map_path=None):
                     return class_name
         return "ExternalActor"
     try:
+        unreal.log(f"[LoadAsset] Loading asset: {asset_path}")
         asset = editor_asset_lib.load_asset(asset_path)
         if asset:
             return asset.get_class().get_name()
@@ -91,6 +93,7 @@ for asset_data in map_assets:
     # World Partition 有効フラグの取得
     is_wp_enabled = False
     try:
+        unreal.log(f"[LoadAsset] Checking WP status, loading map asset: {map_path}")
         world = editor_asset_lib.load_asset(map_path)
         if world:
             world_settings = world.get_world_settings()
@@ -146,6 +149,7 @@ for asset_data in map_assets:
 
                 if is_wp_enabled and current_depth == 1 and exists == True:
                     try:
+                        unreal.log(f"[LoadAsset] Inspecting for WP: {dep_str}")
                         asset = editor_asset_lib.load_asset(dep_str)
                         if asset and asset.get_class().is_child_of(unreal.Actor):
                             if asset.has_editor_property("is_spatially_loaded"):
